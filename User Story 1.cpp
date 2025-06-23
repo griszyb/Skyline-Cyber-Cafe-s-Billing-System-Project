@@ -2,8 +2,15 @@
 #include <fstream>
 #include <string>
 #include <cctype>
+#include <vector>
 
 using namespace std;
+
+// List of pre-authorized admin emails
+vector<string> adminEmails = {
+    "admin@skylinecafe.com",
+    "superuser@skylinecafe.com"
+};
 
 bool emailExists(const string& email) {
     ifstream file("users.txt");
@@ -29,6 +36,47 @@ bool validatePassword(const string& password) {
     }
 
     return hasUpper && hasLower && hasDigit && hasSpecial;
+}
+
+bool isAdminEmail(const string& email) {
+    for (const string& admin : adminEmails) {
+        if (email == admin) return true;
+    }
+    return false;
+}
+
+bool verifyCredentials(const string& email, const string& password) {
+    ifstream file("users.txt");
+    string line;
+    while (getline(file, line)) {
+        if (line.find(email) != string::npos && line.find(password) != string::npos) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void adminLogin() {
+    string email, password;
+
+    cout << "🔐 Admin Login\n";
+    cout << "Enter admin email: ";
+    getline(cin, email);
+
+    if (!isAdminEmail(email)) {
+        cout << "❌ Access denied: Not an authorized admin email.\n";
+        return;
+    }
+
+    cout << "Enter password: ";
+    getline(cin, password);
+
+    if (verifyCredentials(email, password)) {
+        cout << "✅ Admin login successful. Access granted.\n";
+        // Admin-specific functionality can go here
+    } else {
+        cout << "❌ Incorrect password.\n";
+    }
 }
 
 void registerUser() {
@@ -70,7 +118,21 @@ void registerUser() {
 }
 
 int main() {
-    cout << "🏢 Welcome to Skyline Cyber Cafe Registration!\n" << endl;
-    registerUser();
+    int choice;
+    cout << "🏢 Welcome to Skyline Cyber Cafe System\n\n";
+    cout << "1. Register User\n";
+    cout << "2. Admin Login\n";
+    cout << "Choose an option (1 or 2): ";
+    cin >> choice;
+    cin.ignore(); // Clear newline character from buffer
+
+    if (choice == 1) {
+        registerUser();
+    } else if (choice == 2) {
+        adminLogin();
+    } else {
+        cout << "❌ Invalid option selected.\n";
+    }
+
     return 0;
 }
