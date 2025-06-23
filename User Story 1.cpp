@@ -1,81 +1,76 @@
-// User Story 1.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cctype>
 
 using namespace std;
 
-// To check if email already exists in the users file
 bool emailExists(const string& email) {
     ifstream file("users.txt");
     string line;
     while (getline(file, line)) {
         if (line.find(email) != string::npos) {
-            return true; // Email already exists in file
+            return true;
         }
     }
     return false;
 }
 
-// To validate password length (min 8 characters)
 bool validatePassword(const string& password) {
-    return password.length() >= 8;
+    if (password.length() < 8) return false;
+
+    bool hasUpper = false, hasLower = false, hasDigit = false, hasSpecial = false;
+
+    for (char ch : password) {
+        if (isupper(ch)) hasUpper = true;
+        else if (islower(ch)) hasLower = true;
+        else if (isdigit(ch)) hasDigit = true;
+        else hasSpecial = true;
+    }
+
+    return hasUpper && hasLower && hasDigit && hasSpecial;
 }
 
-// To register a new user
 void registerUser() {
     string name, email, password;
 
-    // Get user input
     cout << "Enter your full name: ";
     getline(cin, name);
 
     cout << "Enter your email: ";
     getline(cin, email);
 
-    // Check if email is unique
     if (emailExists(email)) {
         cout << "Email already registered. Please try again with a different email." << endl;
         return;
     }
 
-    // Get password and validate
-    cout << "Enter your password (at least 8 characters): ";
+    cout << "Enter your password (min 8 characters, include uppercase, lowercase, digit, and special character): ";
     getline(cin, password);
 
     if (!validatePassword(password)) {
-        cout << "Password is too short. It must be at least 8 characters long." << endl;
+        cout << "\n❌ Password does not meet the security requirements.\n";
+        cout << "Your password must contain:\n";
+        cout << "- At least 8 characters\n";
+        cout << "- At least one uppercase letter (A-Z)\n";
+        cout << "- At least one lowercase letter (a-z)\n";
+        cout << "- At least one number (0-9)\n";
+        cout << "- At least one special character (e.g., !@#$%^&*)\n";
         return;
     }
 
-    // Store user data in the file
-    ofstream file("users.txt", ios::app); // Open file in append mode
+    ofstream file("users.txt", ios::app);
     if (file.is_open()) {
         file << name << " " << email << " " << password << endl;
         file.close();
-        cout << "Registration successful!" << endl;
-    }
-    else {
-        cout << "Error saving data. Please try again." << endl;
+        cout << "✅ Registration successful!" << endl;
+    } else {
+        cout << "⚠️ Error saving data. Please try again." << endl;
     }
 }
 
 int main() {
-    cout << "Welcome to Skyline Cyber Cafe Registration!" << endl;
+    cout << "🏢 Welcome to Skyline Cyber Cafe Registration!\n" << endl;
     registerUser();
     return 0;
 }
-
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
