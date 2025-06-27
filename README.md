@@ -16,3 +16,56 @@ The bill amount will be tracked for each user. The costs of printing and scannin
 Allow Admin users to log in based upon a list of stored admin emails. 
 Admins can view, edit or delete any user. Admins can also see a list of all usernames, the total time of all user durations and the 
 total value of all prints and scans.
+
+# Skyline Cyber Café Billing System
+
+Skyline Cyber Café Billing System is a C++ console-based application built for **Silver Star Enterprises Ltd.**, designed to manage user sessions, print and scan operations, and provide automated billing for an internet café in Auckland CBD. It supports both regular users and admins with tailored functionality.
+
+---
+
+# Features
+
+# User Functionality
+- **Registration** with secure password validation
+- **Login** with session time tracking
+- **Unique User ID** and join date on registration
+- Start a **session** and:
+  - Perform **print jobs** (charged per page)
+  - Perform **scan jobs** (charged per item)
+  - End session to see **detailed billing summary**
+- View **cumulative billing total** across sessions
+
+# Admin Functionality
+- **Admin registration** restricted to pre-approved emails
+- Admin login with access to:
+  - View **all registered users**
+  - View **individual user reports**:
+    - Total session time (charged per minute)
+    - Total printed pages and scanned items
+    - Total billing
+  - **Edit or delete users** and all associated data
+  - View **system-wide usage summary**
+
+---
+
+# Billing Rates
+
+| Service      | Rate           |
+|--------------|----------------|
+| Session Time | $0.20 per min  |
+| Printing     | $0.50 per page |
+| Scanning     | $0.20 per item |
+
+---
+
+# Files Created & Used
+
+- `users.txt` – stores registered users' details
+- `admins.txt` – list of authorized admin emails
+- `billing_totals.txt` – stores total billed amount for each user
+- `session_logs.txt` – logs session duration and charges
+- `print_logs.txt` – logs all print jobs
+- `scan_logs.txt` – logs all scan jobs
+
+---
+
